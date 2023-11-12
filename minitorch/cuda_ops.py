@@ -243,7 +243,7 @@ def _sum_practice(out: Storage, a: Storage, size: int) -> None:
     cuda.syncthreads()
 
     # shared memory loop
-    for j in range(1, BLOCK_DIM):
+    for j in range(0, BLOCK_DIM):
         if pos >= j:
             cache[pos] += cache[pos - j]
     out[i // BLOCK_DIM] = cache[pos]
