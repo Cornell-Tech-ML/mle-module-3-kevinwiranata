@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Any, Iterable, List, Tuple
+from typing import Any, Iterable, Tuple
 
 from typing_extensions import Protocol
 
@@ -22,7 +22,10 @@ def central_difference(f: Any, *vals: Any, arg: int = 0, epsilon: float = 1e-6) 
     Returns:
         An approximation of $f'_i(x_0, \ldots, x_{n-1})$
     """
-    raise NotImplementedError("Need to include this file from past assignment.")
+    num_add = f(*vals[:arg], vals[arg] + epsilon, *vals[arg + 1 :])
+    num_sub = f(*vals[:arg], vals[arg] - epsilon, *vals[arg + 1 :])
+    denominator = 2 * epsilon
+    return (num_add - num_sub) / denominator
 
 
 variable_count = 1
@@ -60,7 +63,20 @@ def topological_sort(variable: Variable) -> Iterable[Variable]:
     Returns:
         Non-constant Variables in topological order starting from the right.
     """
-    raise NotImplementedError("Need to include this file from past assignment.")
+    visited = []
+    result = []
+
+    def DFSTraverse(node: Variable) -> None:
+        if node.is_constant() or node.unique_id in visited:
+            return
+        if not node.is_leaf():
+            for parent in node.parents:
+                DFSTraverse(parent)
+        visited.append(node.unique_id)
+        result.append(node)
+
+    DFSTraverse(variable)
+    return reversed(result)
 
 
 def backpropagate(variable: Variable, deriv: Any) -> None:
@@ -74,7 +90,16 @@ def backpropagate(variable: Variable, deriv: Any) -> None:
 
     No return. Should write to its results to the derivative values of each leaf through `accumulate_derivative`.
     """
-    raise NotImplementedError("Need to include this file from past assignment.")
+
+    dict = {variable.unique_id: deriv}
+    for var in topological_sort(variable=variable):
+        derivative = dict.get(var.unique_id)
+        if var.is_leaf():
+            var.accumulate_derivative(derivative)
+        else:
+            for back_var, back_deriv in var.chain_rule(derivative):
+                dict.setdefault(back_var.unique_id, 0.0)
+                dict[back_var.unique_id] = dict[back_var.unique_id] + back_deriv
 
 
 @dataclass
