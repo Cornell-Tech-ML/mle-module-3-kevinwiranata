@@ -171,10 +171,6 @@ def tensor_map(
                 out[index_to_position(out_index, out_strides)] = fn(in_storage[index_to_position(in_index, in_strides)])
     return njit(parallel=True)(_map)  # type: ignore
 
-    # return _map
-    # raise NotImplementedError("Need to implement for Task 3.1")
-    return njit(parallel=True)(_map)  # type: ignore
-
 
 def tensor_zip(
     fn: Callable[[float, float], float]
