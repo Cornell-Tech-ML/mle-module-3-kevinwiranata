@@ -301,19 +301,26 @@ def tensor_reduce(
         pos = cuda.threadIdx.x
 
         # insert into shared memory
+        cache[pos] = reduce_value
         if out_pos >= out_size:
             cache[pos] = 0
         else:
+            # to_index(out_pos, out_shape, out_index)
+            # out_index[reduce_dim] = 0
+            # out_pos = index_to_position(out_index, out_strides)
+            # cache[pos] = a_storage[out_pos]
             to_index(out_pos, out_shape, out_index)
-            out_index[reduce_dim] = 0
-            out_pos = index_to_position(out_index, out_strides)
-            cache[pos] = a_storage[out_pos]
+            # o = index_to_position(out_index, out_strides)
+
+            out_index[reduce_dim] = out_index[reduce_dim] * BLOCK_DIM + pos
+            if out_index[reduce_dim] < a_shape[reduce_dim]:
+                cache[pos] = a_storage[index_to_position(out_index, a_strides)]
         cuda.syncthreads()
 
         # shared memory loop
-        for j in range(0, BLOCK_DIM):
-            if pos >= j:
-                cache[pos] = fn(cache[pos], cache[pos - j])
+        for i in range(0, BLOCK_DIM):
+            if pos >= i:
+                cache[pos] = fn(cache[pos], cache[pos - i])
         if pos == BLOCK_DIM - 1:
             out[out_pos] = cache[pos]
 
