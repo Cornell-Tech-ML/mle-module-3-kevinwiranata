@@ -296,6 +296,7 @@ def tensor_reduce(
     ) -> None:
         BLOCK_DIM = 1024
         cache = cuda.shared.array(BLOCK_DIM, numba.float64)
+        i = cuda.blockIdx.x * cuda.blockDim.x + cuda.threadIdx.x
         out_index = cuda.local.array(MAX_DIMS, numba.int32)
         out_pos = cuda.blockIdx.x
         pos = cuda.threadIdx.x
@@ -318,11 +319,15 @@ def tensor_reduce(
         cuda.syncthreads()
 
         # shared memory loop
-        for i in range(0, BLOCK_DIM):
-            if pos >= i:
-                cache[pos] = fn(cache[pos], cache[pos - i])
-        if pos == BLOCK_DIM - 1:
-            out[out_pos] = cache[pos]
+        stride = BLOCK_DIM // 2
+        while stride > 0:
+            if pos < stride and (i + stride) < out_size:
+                cache[pos] += cache[pos + stride]
+            stride //= 2
+            cuda.syncthreads()
+
+        if pos == 0:
+            out[cuda.blockIdx.x] = cache[0]
 
     return cuda.jit()(_reduce)  # type: ignore
 
