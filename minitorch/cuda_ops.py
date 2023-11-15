@@ -296,7 +296,7 @@ def tensor_reduce(
     ) -> None:
         BLOCK_DIM = 1024
         cache = cuda.shared.array(BLOCK_DIM, numba.float64)
-        i = cuda.blockIdx.x * cuda.blockDim.x + cuda.threadIdx.x
+        #i = cuda.blockIdx.x * cuda.blockDim.x + cuda.threadIdx.x
         out_index = cuda.local.array(MAX_DIMS, numba.int32)
         out_pos = cuda.blockIdx.x
         pos = cuda.threadIdx.x
@@ -318,7 +318,7 @@ def tensor_reduce(
                 cache[pos] = a_storage[index_to_position(out_index, a_strides)]
                 cuda.syncthreads()
                 x = 0
-                while 2**x < BLOCK_DIM:
+                while 2 ** x < BLOCK_DIM:
                     if pos % (2**x * 2) == 0:
                         cache[pos] = fn(cache[pos], cache[pos + 2**x])
                         cuda.syncthreads()
@@ -371,9 +371,39 @@ def _mm_practice(out: Storage, a: Storage, b: Storage, size: int) -> None:
         size (int): size of the square
     """
     BLOCK_DIM = 32
-    # TODO: Implement for Task 3.3.
-    raise NotImplementedError("Need to implement for Task 3.3")
+    a_shared = cuda.shared.array((BLOCK_DIM, BLOCK_DIM), numba.float64)
+    b_shared = cuda.shared.array((BLOCK_DIM, BLOCK_DIM), numba.float64)
+    i = cuda.blockIdx.x * cuda.blockDim.x + cuda.threadIdx.x
+    j = cuda.blockIdx.y * cuda.blockDim.y + cuda.threadIdx.y
+    local_i = cuda.threadIdx.x
+    local_j = cuda.threadIdx.y
+    
+    # insert into shared memory
+    if i >= size or j >= size:
+        a_shared[local_i, local_j] = 0
+        b_shared[local_i, local_j] = 0
+    else:
+        a_shared[local_i, local_j] = a[i, j]
+        b_shared[local_i, local_j] = b[i, j]
+        # a_shared[local_i, local_j] = a[i * size + cuda.threadIdx.y]
+        # b_shared[local_i, local_j] = b[cuda.threadIdx.x * size + j]
+        cuda.syncthreads()
+        acc = 0
+        for k in range(size):
+            acc += a_shared[local_i, k] * b_shared[k, local_j]
+        out[i, j] = acc
 
+
+    # shared memory loop
+    # stride = BLOCK_DIM // 2
+    # while stride > 0:
+    #     if cuda.threadIdx.x < stride and (i + stride) < size:
+    #         a_shared[cuda.threadIdx.x, cuda.threadIdx.y] += a_shared[cuda.threadIdx.x + stride, cuda.threadIdx.y]
+    #     if cuda.threadIdx.y < stride and (j + stride) < size:
+    #         b_shared[cuda.threadIdx.x, cuda.threadIdx.y] += b_shared[cuda.threadIdx.x, cuda.threadIdx.y + stride]
+    #     stride //= 2
+    #     cuda.syncthreads()
+        
 
 jit_mm_practice = cuda.jit()(_mm_practice)
 
