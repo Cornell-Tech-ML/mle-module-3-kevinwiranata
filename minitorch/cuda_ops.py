@@ -373,25 +373,21 @@ def _mm_practice(out: Storage, a: Storage, b: Storage, size: int) -> None:
     BLOCK_DIM = 32
     a_shared = cuda.shared.array((BLOCK_DIM, BLOCK_DIM), numba.float64)
     b_shared = cuda.shared.array((BLOCK_DIM, BLOCK_DIM), numba.float64)
-    i = cuda.blockIdx.x * cuda.blockDim.x + cuda.threadIdx.x
-    j = cuda.blockIdx.y * cuda.blockDim.y + cuda.threadIdx.y
     local_i = cuda.threadIdx.x
     local_j = cuda.threadIdx.y
 
     # insert into shared memory
-    if i >= size or j >= size:
+    if local_j >= size or local_j >= size:
         a_shared[local_i, local_j] = 0
         b_shared[local_i, local_j] = 0
     else:
-        a_shared[local_i, local_j] = a[i * 1, j * 1]
-        b_shared[local_i, local_j] = b[i, j]
-        # a_shared[local_i, local_j] = a[i * size + cuda.threadIdx.y]
-        # b_shared[local_i, local_j] = b[cuda.threadIdx.x * size + j]
+        a_shared[local_i, local_j] = a[local_i * size + local_j]
+        b_shared[local_i, local_j] = b[local_i * size + local_j]
         cuda.syncthreads()
         acc = 0
         for k in range(size):
             acc += a_shared[local_i, k] * b_shared[k, local_j]
-        out[i, j] = acc
+        out[size * local_i + local_j] = acc
 
 
     # shared memory loop
