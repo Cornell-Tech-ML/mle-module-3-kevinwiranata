@@ -446,7 +446,7 @@ def _tensor_matrix_multiply(
     j = cuda.blockIdx.y * cuda.blockDim.y + cuda.threadIdx.y
     local_i = cuda.threadIdx.x
     local_j = cuda.threadIdx.y
-    depth = cuda.threadIdx.z
+    batch = cuda.blockIdx.z
 
     # acumulator
     acc = 0.0
@@ -458,14 +458,14 @@ def _tensor_matrix_multiply(
             # insertion for matrix A (x, y, z)
             row_offset = i * a_strides[1]
             col_offset = a_strides[2] * (k + local_j)
-            depth_offset = a_batch_stride * depth
+            depth_offset = a_batch_stride * batch
             a_shared[local_i, local_j] = a_storage[row_offset + col_offset + depth_offset]
         # guard for matrix B
         if j < b_shape[2] and k + local_i < b_shape[1]:
             # insertion for matrix B (x, y, z)
             col_offset = j * b_strides[2]
             row_offset = b_strides[1] * (k + local_i)
-            depth_offset = b_batch_stride * depth
+            depth_offset = b_batch_stride * batch
             b_shared[local_i, local_j] = b_storage[row_offset + col_offset + depth_offset]
 
         # wait for all threads to finish
@@ -481,7 +481,7 @@ def _tensor_matrix_multiply(
     if i < out_shape[1] and j < out_shape[2]:
         row_offset = i * out_strides[1]
         col_offset = out_strides[2] * j
-        depth_offset = out_strides[0] * depth
+        depth_offset = out_strides[0] * batch
         out[row_offset + col_offset + depth_offset] = acc
 
     return None
