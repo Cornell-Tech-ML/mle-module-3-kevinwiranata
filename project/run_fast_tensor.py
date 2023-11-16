@@ -1,4 +1,5 @@
 import random
+import time
 
 import numba
 
@@ -68,6 +69,7 @@ class FastTrain:
         losses = []
 
         for epoch in range(max_epochs):
+            start = time.time()
             total_loss = 0.0
             c = list(zip(data.X, data.y))
             random.shuffle(c)
@@ -90,6 +92,9 @@ class FastTrain:
                 optim.step()
 
             losses.append(total_loss)
+            end = time.time()
+            print("Epoch ", epoch, " time ", start - end, " loss ", total_loss)
+
             # Logging
             if epoch % 10 == 0 or epoch == max_epochs:
                 X = minitorch.tensor(data.X, backend=self.backend)
