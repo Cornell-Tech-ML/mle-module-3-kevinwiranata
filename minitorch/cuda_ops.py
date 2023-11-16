@@ -471,8 +471,9 @@ def _tensor_matrix_multiply(
         # wait for all threads to finish
         cuda.syncthreads()
 
-        # matrix multiplication dot product
-        for local_k in range(BLOCK_DIM):
+        # matrix multiplication dot product with optimization 
+        for local_k in range(min(BLOCK_DIM, a_shape[2] - k)):
+            # guard for shared matrix A and B
             if local_k + k < a_shape[2] and local_k + k < b_shape[1]:
                 acc += a_shared[local_i, local_k] * b_shared[local_k, local_j]
 
