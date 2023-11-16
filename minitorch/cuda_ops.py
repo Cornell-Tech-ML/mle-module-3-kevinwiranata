@@ -463,8 +463,8 @@ def _tensor_matrix_multiply(
         # guard for matrix B
         if j < b_shape[2] and k + local_i < b_shape[1]:
             # insertion for matrix B (x, y, z)
-            row_offset = j * b_strides[2]
-            col_offset = b_strides[1] * (k + local_i)
+            col_offset = j * b_strides[2]
+            row_offset = b_strides[1] * (k + local_i)
             depth_offset = b_batch_stride * depth
             b_shared[local_i, local_j] = b_storage[row_offset + col_offset + depth_offset]
 
@@ -472,7 +472,7 @@ def _tensor_matrix_multiply(
         cuda.syncthreads()
 
         # matrix multiplication dot product with optimization
-        for local_k in range(min(BLOCK_DIM, a_shape[2] - k)):
+        for local_k in range(0, BLOCK_DIM):
             # guard for shared matrix A and B
             if local_k + k < a_shape[2]:
                 acc += a_shared[local_i, local_k] * b_shared[local_k, local_j]
