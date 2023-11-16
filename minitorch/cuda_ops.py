@@ -466,8 +466,8 @@ def _tensor_matrix_multiply(
         cuda.syncthreads()
 
         # matrix multiplication
-        if i < out_shape[1] and j < out_shape[2]:
-            for x in range(BLOCK_DIM):
+        for x in range(BLOCK_DIM):
+            if i < out_shape[1] and j < out_shape[2]:
                 acc += a_shared[local_i, x] * b_shared[x, local_j]
         
         # wait for all threads to finish
