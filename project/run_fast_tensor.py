@@ -93,7 +93,9 @@ class FastTrain:
 
             losses.append(total_loss)
             end = time.time()
-            print("Epoch:", epoch, " time/epoch:", end - start, " loss:", total_loss)
+            y2 = minitorch.tensor(data.y)
+            correct = int(((out.detach() > 0.5) == y2).sum()[0])
+            print("Epoch:", epoch, " time/epoch:", round(end - start, 3), " correct:", correct, "loss:", total_loss)
 
             # Logging
             if epoch % 10 == 0 or epoch == max_epochs:
