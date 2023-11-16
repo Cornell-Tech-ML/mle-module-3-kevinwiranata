@@ -332,3 +332,69 @@ None
 ```
 
 ## Training Output Logs
+**CPU** = Apple M1 Pro 2021 (Sonoma 14.1) <br>
+**GPU** = Google Colab T4 GPU
+### CPU Logs
+#### Dataset 1: Simple
+##### Small Model (100 Hidden Layers)
+[CPU Simple Small Model Full Logs](/logs/cpu_simple_small.txt)
+``````
+poch: 491  time/epoch: 0.117  correct: 49 loss: 1.8380109654322383
+Epoch: 492  time/epoch: 0.102  correct: 48 loss: 0.18852553004727557
+Epoch: 493  time/epoch: 0.1  correct: 49 loss: 0.43735208086087113
+Epoch: 494  time/epoch: 0.101  correct: 49 loss: 2.0487971108145366
+Epoch: 495  time/epoch: 0.098  correct: 49 loss: 0.3313782260199691
+Epoch: 496  time/epoch: 0.103  correct: 49 loss: 1.1217636602836873
+Epoch: 497  time/epoch: 0.101  correct: 49 loss: 0.9122869560250999
+Epoch: 498  time/epoch: 0.115  correct: 50 loss: 0.3245628453834277
+Epoch: 499  time/epoch: 0.1  correct: 50 loss: 0.4232955881340918
+``````
+
+##### Large Model (200 Hidden Layers)
+[CPU Simple Large Model Full Logs](/logs/cpu_simple_large.txt)
+```
+Epoch: 491  time/epoch: 0.396  correct: 50 loss: 0.2209945824060412
+Epoch: 492  time/epoch: 0.411  correct: 50 loss: 0.6070185227374958
+Epoch: 493  time/epoch: 0.4  correct: 50 loss: 0.645320656407705
+Epoch: 494  time/epoch: 0.414  correct: 50 loss: 0.5605561495589545
+Epoch: 495  time/epoch: 0.372  correct: 50 loss: 0.4620321894051821
+Epoch: 496  time/epoch: 0.4  correct: 49 loss: 0.0245559022701354
+Epoch: 497  time/epoch: 0.408  correct: 47 loss: 1.1987126856587431
+Epoch: 498  time/epoch: 0.426  correct: 50 loss: 0.4819944499241963
+Epoch: 499  time/epoch: 0.42  correct: 50 loss: 0.15313880909923205
+
+```
+
+#### Dataset 2: Split
+##### Small Model (100 Hidden Layers)
+[CPU Split Small Model Full Logs](/logs/cpu_split_small.txt)
+
+```
+Epoch: 491  time/epoch: 0.102  correct: 50 loss: 0.8172930346140115
+Epoch: 492  time/epoch: 0.099  correct: 48 loss: 0.9858267357486696
+Epoch: 493  time/epoch: 0.114  correct: 50 loss: 0.07012539075801523
+Epoch: 494  time/epoch: 0.105  correct: 48 loss: 0.1989689883889654
+Epoch: 495  time/epoch: 0.098  correct: 50 loss: 0.09261635327440519
+Epoch: 496  time/epoch: 0.103  correct: 49 loss: 0.9515715172991421
+Epoch: 497  time/epoch: 0.102  correct: 50 loss: 0.06900837839522407
+Epoch: 498  time/epoch: 0.099  correct: 49 loss: 0.9850996613194296
+Epoch: 499  time/epoch: 0.102  correct: 50 loss: 0.21443643562367418
+```
+
+##### Large Model (200 Hidden Layers)
+[CPU Split Large Model Full Logs](/logs/cpu_split_large.txt)
+```
+Epoch: 491  time/epoch: 0.396  correct: 50 loss: 0.2209945824060412
+Epoch: 492  time/epoch: 0.411  correct: 50 loss: 0.6070185227374958
+Epoch: 493  time/epoch: 0.4  correct: 50 loss: 0.645320656407705
+Epoch: 494  time/epoch: 0.414  correct: 50 loss: 0.5605561495589545
+Epoch: 495  time/epoch: 0.372  correct: 50 loss: 0.4620321894051821
+Epoch: 496  time/epoch: 0.4  correct: 49 loss: 0.0245559022701354
+Epoch: 497  time/epoch: 0.408  correct: 47 loss: 1.1987126856587431
+Epoch: 498  time/epoch: 0.426  correct: 50 loss: 0.4819944499241963
+Epoch: 499  time/epoch: 0.42  correct: 50 loss: 0.15313880909923205
+
+```
+
+
+### GPU Logs
