@@ -449,7 +449,7 @@ def _tensor_matrix_multiply(
     depth = cuda.threadIdx.z
 
     # acumulator
-    acc = 0
+    acc = 0.0
 
     # insert into shared memory
     for k in range(0, a_shape[2], BLOCK_DIM):
