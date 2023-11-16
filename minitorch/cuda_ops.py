@@ -463,8 +463,8 @@ def _tensor_matrix_multiply(
         # guard for matrix B
         if j < b_shape[2] and k + local_i < b_shape[1]:
             # insertion for matrix B (x, y, z)
-            row_offset = i * b_strides[1]
-            col_offset = b_strides[2] * (k + local_i)
+            row_offset = j * b_strides[2]
+            col_offset = b_strides[1] * (k + local_i)
             depth_offset = b_batch_stride * depth
             b_shared[local_i, local_j] = b_storage[row_offset + col_offset + depth_offset]
 
