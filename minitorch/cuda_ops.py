@@ -390,17 +390,6 @@ def _mm_practice(out: Storage, a: Storage, b: Storage, size: int) -> None:
         out[size * local_i + local_j] = acc
 
 
-    # shared memory loop
-    # stride = BLOCK_DIM // 2
-    # while stride > 0:
-    #     if cuda.threadIdx.x < stride and (i + stride) < size:
-    #         a_shared[cuda.threadIdx.x, cuda.threadIdx.y] += a_shared[cuda.threadIdx.x + stride, cuda.threadIdx.y]
-    #     if cuda.threadIdx.y < stride and (j + stride) < size:
-    #         b_shared[cuda.threadIdx.x, cuda.threadIdx.y] += b_shared[cuda.threadIdx.x, cuda.threadIdx.y + stride]
-    #     stride //= 2
-    #     cuda.syncthreads()
-        
-
 jit_mm_practice = cuda.jit()(_mm_practice)
 
 
@@ -447,28 +436,46 @@ def _tensor_matrix_multiply(
     """
     a_batch_stride = a_strides[0] if a_shape[0] > 1 else 0
     b_batch_stride = b_strides[0] if b_shape[0] > 1 else 0
-    # Batch dimension - fixed
-    batch = cuda.blockIdx.z
 
     BLOCK_DIM = 32
     a_shared = cuda.shared.array((BLOCK_DIM, BLOCK_DIM), numba.float64)
     b_shared = cuda.shared.array((BLOCK_DIM, BLOCK_DIM), numba.float64)
 
-    # The final position c[i, j]
+    # Variable initializations
     i = cuda.blockIdx.x * cuda.blockDim.x + cuda.threadIdx.x
     j = cuda.blockIdx.y * cuda.blockDim.y + cuda.threadIdx.y
+    local_i = cuda.threadIdx.x
+    local_j = cuda.threadIdx.y
 
-    # The local position in the block.
-    pi = cuda.threadIdx.x
-    pj = cuda.threadIdx.y
+    # acumulator
+    acc = 0
 
-    # Code Plan:
-    # 1) Move across shared dimension by block dim.
-    #    a) Copy into shared memory for a matrix.
-    #    b) Copy into shared memory for b matrix
-    #    c) Compute the dot produce for position c[i, j]
-    # TODO: Implement for Task 3.4.
-    raise NotImplementedError("Need to implement for Task 3.4")
+    # insert into shared memory
+    for k in range(0, a_shape[2], BLOCK_DIM):
+
+        # guard for matrix A
+        if i < a_shape[1] and k + local_j < a_shape[2]:
+            # insertion for matrix A
+            a_shared[local_i, local_j] = a_storage[i * a_strides[1] + k + local_j]
+        # guard for matrix B
+        if i < b_shape[1] and k + local_i < b_shape[2]:
+            # insertion for matrix B
+            b_shared[local_i, local_j] = b_storage[i * b_strides[1] + k + local_i]
+
+        # wait for all threads to finish
+        cuda.syncthreads()
+
+        # matrix multiplication
+        if i < out_shape[1] and j < out_shape[2]:
+            for x in range(BLOCK_DIM):
+                acc += a_shared[local_i, x] * b_shared[x, local_j]
+        
+        # wait for all threads to finish
+        cuda.syncthreads()
+
+    # write to global memory
+    if i < out_shape[1] and j < out_shape[2]:
+        out[i * out_strides[1] + j] = acc
 
 
 tensor_matrix_multiply = cuda.jit(_tensor_matrix_multiply)
