@@ -91,20 +91,24 @@ class FastTrain:
                 # Update
                 optim.step()
 
-            losses.append(total_loss)
             end = time.time()
+            losses.append(total_loss)
+
+            X = minitorch.tensor(data.X, backend=self.backend)
+            y = minitorch.tensor(data.y, backend=self.backend)
+            out = self.model.forward(X).view(y.shape[0])
             y2 = minitorch.tensor(data.y)
             correct = int(((out.detach() > 0.5) == y2).sum()[0])
             print("Epoch:", epoch, " time/epoch:", round(end - start, 3), " correct:", correct, "loss:", total_loss)
 
             # Logging
-            if epoch % 10 == 0 or epoch == max_epochs:
-                X = minitorch.tensor(data.X, backend=self.backend)
-                y = minitorch.tensor(data.y, backend=self.backend)
-                out = self.model.forward(X).view(y.shape[0])
-                y2 = minitorch.tensor(data.y)
-                correct = int(((out.detach() > 0.5) == y2).sum()[0])
-                log_fn(epoch, total_loss, correct, losses)
+            # if epoch % 10 == 0 or epoch == max_epochs:
+            #     X = minitorch.tensor(data.X, backend=self.backend)
+            #     y = minitorch.tensor(data.y, backend=self.backend)
+            #     out = self.model.forward(X).view(y.shape[0])
+            #     y2 = minitorch.tensor(data.y)
+            #     correct = int(((out.detach() > 0.5) == y2).sum()[0])
+            #     log_fn(epoch, total_loss, correct, losses)
 
 
 if __name__ == "__main__":
