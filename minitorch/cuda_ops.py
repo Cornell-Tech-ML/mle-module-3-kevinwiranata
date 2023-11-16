@@ -478,7 +478,10 @@ def _tensor_matrix_multiply(
 
     # write to global memory
     if i < out_shape[1] and j < out_shape[2]:
-        out[i * out_strides[1] + j] = acc
+        row_offset = i * out_strides[1]
+        col_offset = out_strides[2] * j
+        depth_offset = out_strides[0] * depth
+        out[row_offset + col_offset + depth_offset] = acc
 
 
 tensor_matrix_multiply = cuda.jit(_tensor_matrix_multiply)
