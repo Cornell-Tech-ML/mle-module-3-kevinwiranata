@@ -1,6 +1,7 @@
 from typing import Callable, Optional
 
 import numba
+import math
 from numba import cuda
 
 from .tensor import Tensor
@@ -315,11 +316,10 @@ def tensor_reduce(
             if out_index[reduce_dim] < a_shape[reduce_dim]:
                 cache[pos] = a_storage[index_to_position(out_index, a_strides)]
                 cuda.syncthreads()
-                x = 0
-                while (2 ** x) < BLOCK_DIM:
-                    if pos % (2**x * 2) == 0:
+                for x in range(math.ceil(math.log2(BLOCK_DIM))):
+                    if pos % (2 * (2 ** x)) == 0:
                         cache[pos] = fn(cache[pos], cache[pos + 2**x])
-                    x += 1
+
             if pos == 0:
                 out[index_to_position(out_index, out_strides)] = cache[0]
 
