@@ -482,6 +482,8 @@ def _tensor_matrix_multiply(
         col_offset = out_strides[2] * j
         depth_offset = out_strides[0] * depth
         out[row_offset + col_offset + depth_offset] = acc
+    
+    return None
 
 
 tensor_matrix_multiply = cuda.jit(_tensor_matrix_multiply)
