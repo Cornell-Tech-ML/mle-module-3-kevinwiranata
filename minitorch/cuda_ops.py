@@ -453,21 +453,20 @@ def _tensor_matrix_multiply(
 
     # insert into shared memory
     for k in range(0, a_shape[2], BLOCK_DIM):
-
         # guard for matrix A
         if i < a_shape[1] and k + local_j < a_shape[2]:
             # insertion for matrix A (x, y, z)
-            x_offset = i * a_strides[1]
-            y_offset = a_strides[2] * (k + local_j)
-            z_offset = a_batch_stride * depth
-            a_shared[local_i, local_j] = a_storage[x_offset + y_offset + z_offset]
+            row_offset = i * a_strides[1]
+            col_offset = a_strides[2] * (k + local_j)
+            depth_offset = a_batch_stride * depth
+            a_shared[local_i, local_j] = a_storage[row_offset + col_offset + depth_offset]
         # guard for matrix B
         if i < b_shape[1] and k + local_i < b_shape[2]:
             # insertion for matrix B (x, y, z)
-            x_offset = i * b_strides[1]
-            y_offset = b_strides[2] * (k + local_i)
-            z_offset = b_batch_stride * depth
-            b_shared[local_i, local_j] = b_storage[x_offset + y_offset + z_offset]
+            row_offset = i * b_strides[1]
+            col_offset = b_strides[2] * (k + local_i)
+            depth_offset = b_batch_stride * depth
+            b_shared[local_i, local_j] = b_storage[row_offset + col_offset + depth_offset]
 
         # wait for all threads to finish
         cuda.syncthreads()
@@ -476,9 +475,6 @@ def _tensor_matrix_multiply(
         if i < out_shape[1] and j < out_shape[2]:
             for k in range(BLOCK_DIM):
                 acc += a_shared[local_i, k] * b_shared[k, local_j]
-        
-        # wait for all threads to finish
-        cuda.syncthreads()
 
     # write to global memory
     if i < out_shape[1] and j < out_shape[2]:
