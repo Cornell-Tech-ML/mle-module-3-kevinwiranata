@@ -93,7 +93,7 @@ class FastTrain:
 
             losses.append(total_loss)
             end = time.time()
-            print("Epoch ", epoch, " time ", start - end, " loss ", total_loss)
+            print("Epoch:", epoch, " time/epoch:", end - start, " loss:", total_loss)
 
             # Logging
             if epoch % 10 == 0 or epoch == max_epochs:
