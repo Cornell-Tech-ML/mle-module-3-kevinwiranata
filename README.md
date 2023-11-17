@@ -418,7 +418,7 @@ Epoch: 499  time/epoch: 0.057  correct: 50 loss: 0.24512795711797666
 ```
 
 ##### Large Model (200 Hidden Layers)
-[CPU Split Large Model Full Logs](/logs/cpu_xor_hidden_200.txt)
+[CPU XOR Large Model Full Logs](/logs/cpu_xor_hidden_200.txt)
 ```
 Epoch: 490  time/epoch: 0.122  correct: 50 loss: 0.5499636749810255
 Epoch: 491  time/epoch: 0.111  correct: 50 loss: 0.4412281049084891
