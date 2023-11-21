@@ -37,11 +37,11 @@ for N in problem_sizes:
     times.append(elapsed_time)
 
 # Plot problem sizes against times
-plt.plot(problem_sizes, times)
-plt.xlabel("Problem Size (N)")
-plt.ylabel("Time (seconds)")
-plt.title("Performance of _tensor_matrix_multiply")
-plt.grid()
-plt.legend()
-plt.show()
+# plt.plot(problem_sizes, times)
+# plt.xlabel("Problem Size (N)")
+# plt.ylabel("Time (seconds)")
+# plt.title("Performance of _tensor_matrix_multiply")
+# plt.grid()
+# plt.legend()
+# plt.show()
 print(problem_sizes, times)
