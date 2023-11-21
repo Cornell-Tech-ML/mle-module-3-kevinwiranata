@@ -338,8 +338,8 @@ None
 
 #### Dataset 1: Simple
 
-##### Small Model (40 Hidden Layers)
-[CPU Simple Small Model Full Logs](/logs/cpu_simple_hidden_40.txt)
+##### Small Model (100 Hidden Layers)
+[CPU Simple Small Model Full Logs](/logs/cpu_simple_hidden_100)
 ``````
 Epoch: 490  time/epoch: 0.039  correct: 50 loss: 9.35136396147478e-05
 Epoch: 491  time/epoch: 0.039  correct: 50 loss: 0.0041865385105562
@@ -369,8 +369,8 @@ Epoch: 499  time/epoch: 0.137  correct: 50 loss: 0.24869153320376697
 ```
 
 #### Dataset 2: Split
-##### Small Model (40 Hidden Layers)
-[CPU Split Small Model Full Logs](/logs/cpu_split_hidden_40.txt)
+##### Small Model (100 Hidden Layers)
+[CPU Split Small Model Full Logs](/logs/cpu_split_hidden_100)
 
 ```
 Epoch: 490  time/epoch: 0.055  correct: 49 loss: 1.48960119515632
@@ -397,12 +397,12 @@ Epoch: 495  time/epoch: 0.107  correct: 50 loss: 0.22122123099039764
 Epoch: 496  time/epoch: 0.106  correct: 50 loss: 0.20162109659809796
 Epoch: 497  time/epoch: 0.107  correct: 50 loss: 0.3243252551023929
 Epoch: 498  time/epoch: 0.103  correct: 50 loss: 0.03586016343753507
-Epoch: 499  time/epoch: 0.105  correct: 50 loss: 0.0632512405095207
+Epoch: 499  time/epoch: 0.105  correct: 50 loss: 0.0632512times_cpu5095207
 ```
 
 #### Dataset 3: XOR
-##### Small Model (40 Hidden Layers)
-[CPU XOR Small Model Full Logs](/logs/cpu_xor_hidden_40.txt)
+##### Small Model (100 Hidden Layers)
+[CPU XOR Small Model Full Logs](/logs/cpu_xor_hidden_`100`)
 
 ```
 Epoch: 490  time/epoch: 0.048  correct: 50 loss: 0.353932476131671
@@ -435,8 +435,8 @@ Epoch: 499  time/epoch: 0.109  correct: 50 loss: 0.36189260097331766
 ### GPU Logs
 
 #### Dataset 1: Simple
-##### Small Model (40 Hidden Layers)
-[GPU Simple Small Model Full Logs](/logs/gpu_simple_hidden_40.txt)
+##### Small Model (100 Hidden Layers)
+[GPU Simple Small Model Full Logs](/logs/gpu_simple_hidden_100)
 ``````
 Epoch: 490  time/epoch: 2.258  correct: 50 loss: 0.669243913269936
 Epoch: 491  time/epoch: 2.635  correct: 47 loss: 0.012752511048284948
@@ -466,8 +466,8 @@ Epoch: 499  time/epoch: 2.143  correct: 50 loss: 0.10436034954534351
 ```
 
 #### Dataset 2: Split
-##### Small Model (40 Hidden Layers)
-[GPU Split Small Model Full Logs](/logs/gpu_split_hidden_40.txt)
+##### Small Model (100 Hidden Layers)
+[GPU Split Small Model Full Logs](/logs/gpu_split_hidden_100)
 ``````
 Epoch: 490  time/epoch: 1.891  correct: 50 loss: 0.2925929603951757
 Epoch: 491  time/epoch: 1.862  correct: 50 loss: 0.2437077484149956
@@ -496,8 +496,8 @@ Epoch: 499  time/epoch: 1.955  correct: 50 loss: 0.031103915554165702
 ``````
 
 #### Dataset 3: XOR
-##### Small Model (40 Hidden Layers)
-[GPU XOR Small Model Full Logs](/logs/gpu_xor_hidden_40.txt)
+##### Small Model (100 Hidden Layers)
+[GPU XOR Small Model Full Logs](/logs/gpu_xor_hidden_100)
 ``````
 Epoch: 490  time/epoch: 3.153  correct: 48 loss: 0.6854577289726315
 Epoch: 491  time/epoch: 3.192  correct: 48 loss: 0.9608469681394641
