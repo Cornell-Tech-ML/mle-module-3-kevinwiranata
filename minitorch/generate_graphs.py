@@ -13,7 +13,14 @@ problem_sizes = [10, 50, 100, 150, 200, 250]
 
 # Initialize list to store times_cpu
 times_cpu = []
-times_gpu = [4.220008850097656e-05, 9.083747863769531e-05, 0.00015306472778320312, 0.0005927085876464844, 0.0018389225006103516, 0.0010445117950439453]
+times_gpu = [
+    4.220008850097656e-05,
+    9.083747863769531e-05,
+    0.00015306472778320312,
+    0.0005927085876464844,
+    0.0018389225006103516,
+    0.0010445117950439453,
+]
 # For each problem size
 FastTensorBackend = minitorch.TensorBackend(minitorch.FastOps)
 shared: Dict[str, TensorBackend] = {"fast": FastTensorBackend}
