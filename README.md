@@ -331,6 +331,10 @@ No allocation hoisting found
 None
 ```
 
+## CPU vs. GPU Graph & Logs
+![timing.py logs](./logs/timing_summary.png) <br> <br>
+![Timing Graph](./logs//times.png)
+
 ## Training Output Logs
 **CPU** = Apple M1 Pro 2021 (Sonoma 14.1) <br>
 **GPU** = Google Colab T4 GPU
