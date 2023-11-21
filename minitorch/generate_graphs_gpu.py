@@ -7,7 +7,7 @@ import minitorch.fast_ops
 from minitorch import TensorBackend
 
 # Define problem sizes
-problem_sizes = [1, 50, 100, 150, 200, 250]
+problem_sizes = [10, 50, 100, 150, 200, 250]
 
 # Initialize list to store times
 times = []
@@ -33,6 +33,7 @@ for N in problem_sizes:
     end_time = time.time()
     elapsed_time = end_time - start_time
     times.append(elapsed_time)
+    time.sleep(1)
 
 # Plot problem sizes against times
 # plt.plot(problem_sizes, times)

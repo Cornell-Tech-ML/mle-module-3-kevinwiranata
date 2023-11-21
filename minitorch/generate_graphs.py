@@ -9,11 +9,11 @@ import minitorch.fast_ops
 from minitorch import TensorBackend
 
 # Define problem sizes
-problem_sizes = [1, 50, 100, 150, 200, 250]
+problem_sizes = [10, 50, 100, 150, 200, 250]
 
 # Initialize list to store times_cpu
 times_cpu = []
-times_gpu = [5.412101745605469e-05, 0.0001277923583984375, 0.0014340877532958984, 0.00585174560546875]
+times_gpu = [4.220008850097656e-05, 9.083747863769531e-05, 0.00015306472778320312, 0.0005927085876464844, 0.0018389225006103516, 0.0010445117950439453]
 # For each problem size
 FastTensorBackend = minitorch.TensorBackend(minitorch.FastOps)
 shared: Dict[str, TensorBackend] = {"fast": FastTensorBackend}
@@ -33,6 +33,7 @@ for N in problem_sizes:
     end_time = time.time()
     elapsed_time = end_time - start_time
     times_cpu.append(elapsed_time)
+    time.sleep(1)
 
 # Plot problem sizes against times_cpu
 plt.plot(problem_sizes, times_cpu, label="CPU")
