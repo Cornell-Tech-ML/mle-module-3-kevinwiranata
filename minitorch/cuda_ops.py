@@ -1,7 +1,7 @@
+import math
 from typing import Callable, Optional
 
 import numba
-import math
 from numba import cuda
 
 from .tensor import Tensor
@@ -160,6 +160,7 @@ def tensor_map(
             out_pos = index_to_position(out_index, out_strides)
             in_pos = index_to_position(in_index, in_strides)
             out[out_pos] = fn(in_storage[in_pos])
+
     return cuda.jit()(_map)  # type: ignore
 
 
@@ -207,6 +208,7 @@ def tensor_zip(
             a_pos = index_to_position(a_index, a_strides)
             b_pos = index_to_position(b_index, b_strides)
             out[out_pos] = fn(a_storage[a_pos], b_storage[b_pos])
+
     return cuda.jit()(_zip)  # type: ignore
 
 
@@ -317,7 +319,7 @@ def tensor_reduce(
                 cache[pos] = a_storage[index_to_position(out_index, a_strides)]
                 cuda.syncthreads()
                 for x in range(math.ceil(math.log2(BLOCK_DIM))):
-                    if pos % (2 * (2 ** x)) == 0:
+                    if pos % (2 * (2**x)) == 0:
                         cache[pos] = fn(cache[pos], cache[pos + 2**x])
 
             if pos == 0:
@@ -445,14 +447,18 @@ def _tensor_matrix_multiply(
             row_offset = i * a_strides[1]
             col_offset = a_strides[2] * (k + local_j)
             depth_offset = a_batch_stride * batch
-            a_shared[local_i, local_j] = a_storage[row_offset + col_offset + depth_offset]
+            a_shared[local_i, local_j] = a_storage[
+                row_offset + col_offset + depth_offset
+            ]
         # guard for matrix B
         if j < b_shape[2] and k + local_i < b_shape[1]:
             # insertion for matrix B (x, y, z)
             col_offset = j * b_strides[2]
             row_offset = b_strides[1] * (k + local_i)
             depth_offset = b_batch_stride * batch
-            b_shared[local_i, local_j] = b_storage[row_offset + col_offset + depth_offset]
+            b_shared[local_i, local_j] = b_storage[
+                row_offset + col_offset + depth_offset
+            ]
 
         # wait for all threads to finish
         cuda.syncthreads()

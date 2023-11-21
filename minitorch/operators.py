@@ -12,7 +12,7 @@ from typing import Callable, Iterable
 
 def mul(x: float, y: float) -> float:
     "$f(x, y) = x * y$"
-    
+
     """
     Multiplication operator
 
@@ -39,13 +39,13 @@ def id(x: float) -> float:
        Input float x
     """
     return x
-    
+
     raise NotImplementedError("Need to implement for Task 0.1")
 
 
 def add(x: float, y: float) -> float:
     "$f(x, y) = x + y$"
-    
+
     """
     Addition operator
 
@@ -62,7 +62,7 @@ def add(x: float, y: float) -> float:
 
 def neg(x: float) -> float:
     "$f(x) = -x$"
-    
+
     """
     Negative operator
 
@@ -78,7 +78,7 @@ def neg(x: float) -> float:
 
 def lt(x: float, y: float) -> float:
     "$f(x) =$ 1.0 if x is less than y else 0.0"
-    
+
     """
     Lower than operator
 
@@ -96,7 +96,7 @@ def lt(x: float, y: float) -> float:
 
 def eq(x: float, y: float) -> float:
     "$f(x) =$ 1.0 if x is equal to y else 0.0"
-    
+
     """
     Equal operator
 
@@ -114,7 +114,7 @@ def eq(x: float, y: float) -> float:
 
 def max(x: float, y: float) -> float:
     "$f(x) =$ x if x is greater than y else y"
-    
+
     """
     Max operator
 
@@ -135,7 +135,7 @@ def max(x: float, y: float) -> float:
 
 def is_close(x: float, y: float) -> float:
     "$f(x) = |x - y| < 1e-2$"
-    
+
     """
     Is close operator
 
@@ -163,7 +163,7 @@ def sigmoid(x: float) -> float:
 
     for stability.
     """
-    
+
     """
     Sigmoid operator
 
@@ -186,7 +186,7 @@ def relu(x: float) -> float:
 
     (See https://en.wikipedia.org/wiki/Rectifier_(neural_networks) .)
     """
-    
+
     """
     Relu operator
 
@@ -216,7 +216,7 @@ def exp(x: float) -> float:
 
 def log_back(x: float, d: float) -> float:
     r"If $f = log$ as above, compute $d \times f'(x)$"
-    
+
     """
     Log Back operator
 
@@ -233,7 +233,7 @@ def log_back(x: float, d: float) -> float:
 
 def inv(x: float) -> float:
     "$f(x) = 1/x$"
-    
+
     """
     Inv operator
 
@@ -249,7 +249,7 @@ def inv(x: float) -> float:
 
 def inv_back(x: float, d: float) -> float:
     r"If $f(x) = 1/x$ compute $d \times f'(x)$"
-    
+
     """
     Inv Back operator
 
@@ -266,7 +266,7 @@ def inv_back(x: float, d: float) -> float:
 
 def relu_back(x: float, d: float) -> float:
     r"If $f = relu$ compute $d \times f'(x)$"
-    
+
     """
     Relu Back operator
 

@@ -159,7 +159,11 @@ def tensor_map(
         in_shape: Shape,
         in_strides: Strides,
     ) -> None:
-        if (np.array_equal(in_strides, out_strides) and np.array_equal(in_shape, out_shape) and len(in_shape) == len(out_shape)):
+        if (
+            np.array_equal(in_strides, out_strides)
+            and np.array_equal(in_shape, out_shape)
+            and len(in_shape) == len(out_shape)
+        ):
             for i in prange(len(out)):
                 out[i] = fn(in_storage[i])
         else:
@@ -168,7 +172,10 @@ def tensor_map(
                 in_index = np.empty(len(in_shape), np.int32)
                 to_index(i, out_shape, out_index)
                 broadcast_index(out_index, out_shape, in_shape, in_index)
-                out[index_to_position(out_index, out_strides)] = fn(in_storage[index_to_position(in_index, in_strides)])
+                out[index_to_position(out_index, out_strides)] = fn(
+                    in_storage[index_to_position(in_index, in_strides)]
+                )
+
     return njit(parallel=True)(_map)  # type: ignore
 
 
@@ -205,7 +212,12 @@ def tensor_zip(
         b_shape: Shape,
         b_strides: Strides,
     ) -> None:
-        if (len(a_shape) == len(b_shape) and np.array_equal(a_strides, b_strides) and np.array_equal(a_shape, b_shape) and np.array_equal(b_strides, out_strides)):
+        if (
+            len(a_shape) == len(b_shape)
+            and np.array_equal(a_strides, b_strides)
+            and np.array_equal(a_shape, b_shape)
+            and np.array_equal(b_strides, out_strides)
+        ):
             for i in prange(len(out)):
                 out[i] = fn(a_storage[i], b_storage[i])
         else:
@@ -220,6 +232,7 @@ def tensor_zip(
                 b_pos = index_to_position(b_index, b_strides)
                 out_pos = index_to_position(out_index, out_strides)
                 out[out_pos] = fn(a_storage[a_pos], b_storage[b_pos])
+
     return njit(parallel=True)(_zip)  # type: ignore
 
 
