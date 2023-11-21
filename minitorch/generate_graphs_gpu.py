@@ -23,7 +23,7 @@ for N in problem_sizes:
     # Initialize NxN tensor
     tensor = np.random.rand(N, N)
     # Assuming `tensor` is a numpy ndarray
-    #tensor = minitorch.Tensor(tensor, backend=shared["cuda"])
+    # tensor = minitorch.Tensor(tensor, backend=shared["cuda"])
 
     # Start timer
     start_time = time.time()
