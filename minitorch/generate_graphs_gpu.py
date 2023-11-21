@@ -1,7 +1,5 @@
 import time
 from typing import Dict
-
-import matplotlib.pyplot as plt
 import numpy as np
 
 import minitorch
@@ -9,7 +7,7 @@ import minitorch.fast_ops
 from minitorch import TensorBackend
 
 # Define problem sizes
-problem_sizes = [10, 100, 250, 500, 1000, 2500, 5000]
+problem_sizes = [1, 50, 100, 150, 200, 250]
 
 # Initialize list to store times
 times = []

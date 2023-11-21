@@ -9,11 +9,11 @@ import minitorch.fast_ops
 from minitorch import TensorBackend
 
 # Define problem sizes
-problem_sizes = [10, 100, 250, 500, 1000, 2500, 5000]
+problem_sizes = [1, 50, 100, 150, 200, 250]
 
-# Initialize list to store times
-times = []
-
+# Initialize list to store times_cpu
+times_cpu = []
+times_gpu = [5.412101745605469e-05, 0.0001277923583984375, 0.0014340877532958984, 0.00585174560546875]
 # For each problem size
 FastTensorBackend = minitorch.TensorBackend(minitorch.FastOps)
 shared: Dict[str, TensorBackend] = {"fast": FastTensorBackend}
@@ -32,14 +32,15 @@ for N in problem_sizes:
     # Stop timer and record time
     end_time = time.time()
     elapsed_time = end_time - start_time
-    times.append(elapsed_time)
+    times_cpu.append(elapsed_time)
 
-# Plot problem sizes against times
-plt.plot(problem_sizes, times)
+# Plot problem sizes against times_cpu
+plt.plot(problem_sizes, times_cpu, label="CPU")
+plt.plot(problem_sizes, times_gpu, label="GPU")
 plt.xlabel("Problem Size (N)")
 plt.ylabel("Time (seconds)")
 plt.title("Performance of _tensor_matrix_multiply")
 plt.grid()
 plt.legend()
 plt.show()
-print(problem_sizes, times)
+print(problem_sizes, times_cpu)
